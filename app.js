@@ -13,7 +13,7 @@ const app = express()
 app.use(express.json())
 
 mongoose.connect(process.env.MONGO_URI).then(() => {
-    console.info("DB CONNECTION SUCCESSFULL")
+    console.info("DB CONNECTION SUCCESSFUL")
 }).catch(() => {
     console.info("DB CONNECTION FAILED")
 })

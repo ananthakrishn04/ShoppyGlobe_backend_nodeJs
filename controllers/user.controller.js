@@ -1,13 +1,22 @@
 import User from "../models/user.model.js"
 import jwt from "jsonwebtoken"
+import bcrypt from "bcryptjs"
 
 export const register = async(req, res) => {
     try {
-        const user = await User.create(req.body)
+        const { name, password, email } = req.body
+        const userCheck = await User.findOne({name})
+
+        if(userCheck){
+            return res.status(400).json({message : "User already registered"})
+        }
+        const hashed_password = bcrypt.hashSync(password, 10)
+
+        const user = await User.create({name, hashed_password , email})
         return res.status(201).json({message: "User registered Successfully"})
     }catch(err){
         if(err.name === "ValidationError"){
-            const messages = Object.values(error.errors).map(err => err.message);
+            const messages = Object.values(err.errors).map(err => err.message);
             return res.status(400).json({
                 message: "Validation Error",
                 errors: messages
@@ -21,10 +30,15 @@ export const register = async(req, res) => {
 
 export const login = async(req, res) => {
     try {
-        const user = await User.findOne(req.body)
+        const { name, password } = req.body
+        const user = await User.findOne({name})
 
         if(!user){
-            return res.status(404).json({message : "INVALID CREDENTIALS / USER NOT FOUND IN DATABASE"})
+            return res.status(404).json({message : "USER NOT FOUND IN DATABASE"})
+        }
+
+        if(!bcrypt.compareSync(password, user.hashed_password)){
+            return res.status(401).json({message : "INVALID CREDENTIALS PROVIDED"})
         }
 
         const token = jwt.sign({ id : user._id }, process.env.SECRET_KEY, {expiresIn: "30m"})

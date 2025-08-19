@@ -1,8 +1,5 @@
 import User from "../models/user.model.js"
 import jwt from "jsonwebtoken"
-import dotenv from "dotenv"
-
-dotenv.config()
 
 export const register = async(req, res) => {
     try {
@@ -24,7 +21,7 @@ export const register = async(req, res) => {
 
 export const login = async(req, res) => {
     try {
-        const user = await User.find(req.body)
+        const user = await User.findOne(req.body)
 
         if(!user){
             return res.status(404).json({message : "INVALID CREDENTIALS / USER NOT FOUND IN DATABASE"})

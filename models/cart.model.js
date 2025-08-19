@@ -30,14 +30,7 @@ const cartSchema = mongoose.Schema({
         type : Date,
         default : Date.now
     }
-})
-
-
-cartSchema.pre("save", (next) => {
-    this.updatedAt = Date.now();
-    next();
-})
-
+},{timestamps : true});
 
 const Cart = mongoose.model("cart", cartSchema)
 

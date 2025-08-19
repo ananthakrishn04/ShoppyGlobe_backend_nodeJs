@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+//custom Cart item schema for storing product : ID and quantity ; Number
 const cartItemSchema = mongoose.Schema({
     product : {
         type : mongoose.Schema.Types.ObjectId,
@@ -14,6 +15,8 @@ const cartItemSchema = mongoose.Schema({
     }
 })
 
+//Cart schema Object for storing the cart document which contains user : Id,
+// items : [CartItemSchema], 
 const cartSchema = mongoose.Schema({
     user : {
         type : mongoose.Schema.Types.ObjectId,
@@ -22,14 +25,6 @@ const cartSchema = mongoose.Schema({
         unique : true
     },
     items : [cartItemSchema],
-    createdAt : {
-        type : Date,
-        default : Date.now
-    },
-    updatedAt : {
-        type : Date,
-        default : Date.now
-    }
 },{timestamps : true});
 
 const Cart = mongoose.model("cart", cartSchema)

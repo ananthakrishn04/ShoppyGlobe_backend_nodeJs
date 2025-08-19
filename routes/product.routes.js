@@ -3,7 +3,6 @@ import { getProduct, getProducts, addProduct } from "../controllers/product.cont
 import authMiddleware from "../middlewares/authMiddleware.js"
 
 const ProductRoutes = express.Router()
-ProductRoutes.use(authMiddleware)
 
 ProductRoutes.get("/", getProducts)
 ProductRoutes.get("/:id", getProduct)
